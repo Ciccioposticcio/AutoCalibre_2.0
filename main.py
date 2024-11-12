@@ -30,13 +30,15 @@ db = SQLAlchemy()
 db.init_app(app)
 
 #Definisco variabili di configurazione visibili a livello globale
-app.config["API_KEY"] = "905QT51HKUH8KETT"
+app.config["API_KEY"] = ""
 
 # Route per la home page
 @app.route('/')
 def home():
     app.config["API_KEY"] = get_API_KEY()
     roic = 'x'
+    tiingo_get_FUNDAMENTALS("AAPL")
+    exit(1)
     return render_template('index.html', roic = roic)
 
 
@@ -154,6 +156,25 @@ def get_API_KEY():
         x = x.replace(" ","") #tolgo eventuali spazi dalla stringa
     return x
 
+def tiingo_get_FUNDAMENTALS(ticker):
+    import requests
+    api_key = app.config["API_KEY"]
+    url = f"https://api.tiingo.com/tiingo/fundamentals/{ticker}/statements"
+    headers = {
+    'Content-Type': 'application/json',
+    'Authorization': f'Token {api_key}'
+    }
+    
+    # Esegui la richiesta
+    response = requests.get(url, headers=headers)
+
+    # Verifica la risposta
+    if response.status_code == 200:
+        data = response.json()
+        print(data)
+    else:
+        print("Errore:", response.status_code, response.text)
+    
     
 # Altre rotte possono essere aggiunte qui
 # @app.route('/about')
