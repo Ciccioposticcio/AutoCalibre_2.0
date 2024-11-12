@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script> 
+    <title>Autocalibre v0.10</title>
+</head>
+<body class= "h-screen justify-center items-center bg-gray-100">
+    <h1>Benvenuto nella mia applicazione Flask!</h1>
+    <p>Questa è la home page dell'applicazione.</p>
+
+        <div class= "flex h-screen w-full justify-center items-center border border-blue-500">
+            <form class ="w-full max-w-md border border-green-500" id="formCercaTicker" action="/cercaTicker" method="POST" onsubmit="" onreset= "" > <!-- Qui indico a quale frammento flask vengono inviati i dati del form-->
+                    <input class="w-3/4 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="name_input_cercaTicker" id="id_input_cercaTicker" type="text" placeholder="" onkeyup="" onchange=""/>
+                    <button id="id_button_cercaTicker" type="submit" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Cerca</button>
+                </div>
+    
+            </form>
+        </div>
+        ROIC: {{ roic }}
+</body>
+</html>

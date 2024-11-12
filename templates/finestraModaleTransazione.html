@@ -1,0 +1,60 @@
+<!-- Finestra Modale - Nuova/Modifica Transazione -->
+ <!-- Questa è la finestra che si occupa di gestire l'inserimento di una nuova Entrata/Uscita (ma anche di modificarla)-->
+<div id="myModal" class="fixed top-0 inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="relative bg-white p-8 rounded-md shadow-md w-96"> <!-- relative serve per la X in alto a destra -->
+        <!-- Intestazione -->
+        <p id="titoloFinestraModale" class="border-b-2 w-full">Nuova Transazione</p>
+        <form id="formFinestra" action="/submittingTransazione" method="POST" onsubmit="fnValidaMaschera()" onreset= "fnHideAllAlert()" > <!-- Qui indico a quale frammento flask vengono inviati i dati del form-->
+            <div class="mb-4 mt-3">
+                <!--Tipo Finestra, valori possibili: NuovaTransazione (il default) o ModificaTransazione. Campo hidden-->
+                <input type="hidden" name = "tipoFinestra" id="tipoFinestra" value="NuovaTransazione"/>
+                <input type="hidden" name = "idRecord" id="idRecord" value=""/> <!--E' il numero del record nella tabella del database quando Tipo Finestra = ModificaTransazione-->
+                
+                <!-- Data -->
+                <label class="block text-gray-700 text-sm mb-1" for="dataInput">Data</label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="dataInput" id="dataInput" type="date" placeholder="Seleziona una data" onchange="fnHideAlert('alertData')"/>
+                <p id="alertData" class="mt-2 text-sm text-red-600 dark:text-red-500" hidden>Inserire una data per favore</p>
+                
+                <!-- Beneficiario -->
+                <label class="block text-gray-700 text-sm mb-1 mt-3" for="BeneficiarioInput">Beneficiario</label>
+                <input list="BeneficiarioInput_list" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name ="BeneficiarioInput" id="BeneficiarioInput" type="text" placeholder="Indica il beneficiario" onchange="fnHideAlert('alertBeneficiario')"/>
+                <datalist id="BeneficiarioInput_list">
+                {% for pa in beneficiari_list %}
+                    <option value="{{ pa.beneficiario }}">{{ pa.beneficiario }}</option>
+                {% endfor %}
+                </datalist>
+                <p id="alertBeneficiario" class="mt-2 text-sm text-red-600 dark:text-red-500" hidden>Per favore inserisci il beneficiario</p>
+
+                <!-- Categoria -->
+                <label class="block text-gray-700 text-sm mb-1 mt-3" for="CategoriaInput">Categoria</label>
+                <input list="CategoriaInput_list" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name = "CategoriaInput" id="CategoriaInput" type="text" placeholder="Indica la categoria" onchange="fnHideAlert('alertCategoria')"/>
+                <datalist id="CategoriaInput_list">
+                {% for ca in categorie_list %}
+                    <option value="{{ ca.categoria }}">{{ ca.categoria }}</option>
+                {% endfor %}
+                </datalist>
+                <p id="alertCategoria" class="mt-2 text-sm text-red-600 dark:text-red-500" hidden>Per favore inserisci la categoria</p>
+                
+                <!-- Memo -->
+                <label class="block text-gray-700 text-sm mb-1 mt-3" for="MemoInput">Memo</label>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="MemoInput" id="MemoInput" placeholder="Descrizione della transazione"></textarea>
+                
+                <!-- Entrata/Uscita -->
+                <div class="flex mt-2">
+                    <label class="block text-gray-700 text-sm mb-1 mt-3 w-1/2" for="EntrataInput">Entrata</label>
+                    <label class="block text-gray-700 text-sm mb-1 mt-3 w-1/2" for="UscitaInput">Uscita</label>
+                </div>
+                <div class="flex">
+                    <input class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="EntrataInput" id="EntrataInput" type="text" placeholder="€" onkeyup="fnVerificaValuta('EntrataInput')" onchange="fnHideAlert('alertEU')"/>
+                    <input class="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" name="UscitaInput" id="UscitaInput" type="text" placeholder="€" onkeyup="fnVerificaValuta('UscitaInput')" onchange="fnHideAlert('alertEU')" />
+                </div>
+                <p id="alertEU" class="mt-2 text-sm text-red-600 dark:text-red-500" hidden>Per favore inserisci una entrata o una uscita</p>
+            </div>
+            <button id="closeModalX" class="absolute top-0 right-0 mt-2 mr-2 bg-transparent hover:text-red-500 text-slate-500 text-3xl py-2 px-3 rounded-full">&times;</button>
+            <div class="button-container mt-4 flex justify-end">
+                <button id="closeModalButton" type="reset" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Chiudi </button>
+                <button id="registraModalButton" type="submit" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Registra</button>
+            </div>
+        </form>
+    </div>
+</div>

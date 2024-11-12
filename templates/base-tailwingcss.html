@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- richiesto da bootstrap5 https://getbootstrap.com/docs/5.3/getting-started/introduction/-->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>PyNAB</title>
+</head>
+<body class="bg-slate-300">
+  <div class = "bg-blue-300 border border-black h-[25px] pl-5" name = "Titolo del progetto">
+    <b class="flex">Progetto PyNAB - <label id="idLabel_contoCorrente_Selezionato">{{ contoCorrente_Selezionato }}</label> </b>
+  </div>
+  
+  <div class ="grid grid-cols-7 bg-slate-300">
+    <div name="colonna1"> 
+      <div class="w-60 bg-red-400 border border-blue-500 rounded-xl shadow-xl shadow-black mx-4 my-8 pl-5 pt-2 pb-2 pr-5" name="Menu_ynab_in_alto_a_sx">
+        <div class="flex"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7 21h-4v-11h4v11zm7-11h-4v11h4v-11zm7 0h-4v11h4v-11zm2 12h-22v2h22v-2zm-23-13h24l-12-9-12 9z"/></svg> - Tutti i conti<br></div>
+        <div class="flex"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.021 0c-1.646 0-2.98 1.335-2.98 2.98 0 .652.21 1.256.566 1.746l-3.275 3.274h2.144l2.309-2.309c.376.173.795.269 1.236.269 1.645 0 2.979-1.334 2.979-2.98s-1.334-2.98-2.979-2.98zm0 2.338c-.513 0-.929-.292-.929-.653s.416-.653.929-.653c.512 0 .928.292.928.653s-.417.653-.928.653zm-14.021 10.662h10v1h-10v-1zm10-2h-10v-1h10v1zm-3-4v1h-7v-1h7zm8 .861v6.524c0 2.392-6.648 9.615-9.811 9.615h-10.189v-24h15.055c-.439.584-.767 1.257-.915 2h-12.14v20h7.362c4.156 0 2.638-6 2.638-6s6 1.65 6-2.457v-5.746c.668.215 1.33.198 2 .064z"/></svg>- Report<br></div>
+        <div class="flex"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 0h-14c-2.762 0-5 2.239-5 5v14c0 2.761 2.238 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm3 7h-3v2h3v6h-6v2h6v2c0 1.654-1.346 3-3 3h-14c-1.654 0-3-1.346-3-3v-2h2v-2h-2v-6h8v-2h-8v-2c0-1.654 1.346-3 3-3h14c1.654 0 3 1.346 3 3v2zm-8 3c0 .552-.447 1-1 1s-1-.448-1-1v-4c0-.552.447-1 1-1s1 .448 1 1v4zm3 0c0 .552-.447 1-1 1s-1-.448-1-1v-4c0-.552.447-1 1-1s1 .448 1 1v4zm-9 8c0 .552-.447 1-1 1s-1-.448-1-1v-4c0-.552.447-1 1-1s1 .448 1 1v4zm3 0c0 .552-.447 1-1 1s-1-.448-1-1v-4c0-.552.447-1 1-1s1 .448 1 1v4zm3 0c0 .552-.447 1-1 1s-1-.448-1-1v-4c0-.552.447-1 1-1s1 .448 1 1v4z"/></svg>- Budget</div>
+      </div>
+
+      <!-- il div in cui sta la tabella dei Conti -->
+      <div class="max-s-full overflow-x-auto bg-cyan-200 border border-blue-600 rounded-xl mx-1 pl-1 pt-2 pb-2 pr-1">
+        {% include 'tabella_conti.html' %}     
+      </div>
+      <!-- linea orizzontale con sotto il big totale -->
+      
+      <!-- finestra non modale per il menu di contesto-->
+      {% include 'menu_contestuale_tabellaConti.html' %}
+      {% include 'popup_ConfermaChiusuraConto.html' %}
+
+      <!-- pulsante gestione conti -->
+      <div class="button-container mt-4 flex justify-center">
+        <button id="button_creaConto" type="reset" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-0 px-4 rounded" onclick="bottone_gestioneConti()">Crea nuovo conto</button>
+      </div>
+      {% include 'crea_conto.html' %}
+    </div>
+    <div class="bg-white border border-black rounded-xl mx-3 pl-5 pt-2 pb-2 pr-5 col-span-6 " name = "colonna2">
+      <div class="overflow-y-auto overflow-hidden h-100">
+        {% include 'tabella_operazioni.html' %}      
+      </div>
+      
+      <!-- I pulsanti sotto la  tabella operazioni -->
+      <div class="py-3 bg-blue-600">
+        <button id="openModalButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nuova transazione</button>
+        <button id="apriModaleTrasferimentoButton" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Fai un trasferimento</button>
+      </div>
+      {% include 'finestraModaleTransazione.html' %}
+      
+      <!-- Il popup che viene aperto quando si preme il pulsante "Fai un trasferimento" (id: apriModaleTrasferimentoButton)-->
+      {% include 'finestraModaleTrasferimento.html' %}
+
+      <!-- finestra non modale per il menu di contesto-->
+      {% include 'menu_contestuale_tabellaOperazioni.html' %}
+      
+      <!-- finestra modale per popup di conferma -->
+      {% include 'popup_menuContestuale_tabellaOperazioni_Cancellazione.html' %}
+      <!-- finestra modale per lo spostamento da menu contestuale  -->
+      {% include 'modaleSpostamentoConto.html' %}
+      <!-- finestra modale per lo spostamento da menu contestuale  -->
+      {% include 'popup_menucontestuale_tabellaConti_Modifica.html' %}
+      <!-- finestra modale per l'aggiornamento del bilancio  -->
+      {% include 'popup_TabellaConti_MenuContestuale_Modifica_AggiornaBilancio.html' %}
+    </div>
+  </div>
+</div>
+
+<script>
+  //Qui vengono inzializzate tutte le variabili globali per il codice javascript
+  let contoCorrente_Selezionato = "{{ contoCorrente_Selezionato }}"   //ma la uso da qualche parte??? --> Si, in elimina_Record_tabella_Operazioni() e siccome questa variabile sta fuori dal pynab.js ha generato errori. --> Conclusione, non conviene tenere variabili globali fuori dal javascript, meglio mettere i valori in un elemento nascosto gestito all'interno di pynab.js
+</script>
+<!-- CDN -->
+<script src="..\static\pynab.js"></script> <!-- per farlo funzionare il file deve stare nella cartella static che Flask vuole per i file statici-->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Il CDN per Axios, che uso per le chiamate ajax-->
+
+</body>
+</html>
