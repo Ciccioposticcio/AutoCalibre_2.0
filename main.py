@@ -37,7 +37,8 @@ app.config["API_KEY"] = ""
 def home():
     app.config["API_KEY"] = get_API_KEY()
     roic = 'x'
-    tiingo_get_FUNDAMENTALS("AAPL")
+    tiingo_get_DAILY("AAPL")
+    #tiingo_get_FUNDAMENTALS("AAPL")
     exit(1)
     return render_template('index.html', roic = roic)
 
@@ -174,7 +175,41 @@ def tiingo_get_FUNDAMENTALS(ticker):
         print(data)
     else:
         print("Errore:", response.status_code, response.text)
+
+def tiingo_get_DAILY(ticker):
+    import requests
+
+    api_key = app.config["API_KEY"]
     
+
+    # URL dell'endpoint per ottenere i price target e le valutazioni degli analisti
+    url = f"https://api.tiingo.com/tiingo/daily/{ticker}/prices" 
+    
+
+    # header di autorizzazione per Tiingo
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Token {api_key}'
+    }
+
+    # Effettua la richiesta
+    response = requests.get(url, headers=headers)
+
+    # Controlla se la richiesta è andata a buon fine
+    if response.status_code == 200:
+        data = response.json()
+        
+        # Stampa i dati per il price target e le valutazioni degli analisti
+        for entry in data:
+            print(f"Date: {entry['date']}")
+            print(f"Mean Price Target: {entry['meanPriceTarget']}")
+            print(f"Median Price Target: {entry['medianPriceTarget']}")
+            print(f"Low Price Target: {entry['lowPriceTarget']}")
+            print(f"High Price Target: {entry['highPriceTarget']}")
+            print(f"Number of Ratings: {entry['numRatings']}\n")
+    else:
+        print("Errore nella richiesta:", response.status_code, response.text)
+
     
 # Altre rotte possono essere aggiunte qui
 # @app.route('/about')
