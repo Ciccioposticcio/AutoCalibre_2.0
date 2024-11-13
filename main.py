@@ -42,7 +42,7 @@ def home():
     return render_template('index.html', roic = roic)
 
 
-def calcolaEbit(symbol, income_data ):
+def calcola_AlphaAdvantage_Ebit(symbol, income_data ):
     x= 0
     # Utilizza i dati del report annuale più recente
     latest_annual_report = income_data['annualReports'][0]  # Rapporto annuale più recente
@@ -58,7 +58,7 @@ def calcolaEbit(symbol, income_data ):
     print(f"EBIT approssimativo per {symbol}: ${ebit:.2f}")
     return(ebit)
 
-def calcolaTaxRate(data):
+def calcola_AlphaAdvantage_TaxRate(data):
     # Utilizza i dati del report annuale più recente
     latest_annual_report = data['annualReports'][0]  # Rapporto annuale più recente
 
@@ -76,7 +76,7 @@ def calcolaTaxRate(data):
     
     return tax_rate
     
-def calcolaROIC(symbol,ebit,taxRate, balance_sheet_data):
+def calcola_AlphaAdvantage_ROIC(symbol,ebit,taxRate, balance_sheet_data):
 
     # Ottieni il capitale investito (Net Working Capital + Fixed Assets) dal bilancio
     latest_annual_report = balance_sheet_data['annualReports'][0]  # Rapporto annuale più recente
@@ -92,7 +92,7 @@ def calcolaROIC(symbol,ebit,taxRate, balance_sheet_data):
     print(f"ROIC per {symbol}: {roic:.2f}%")
     return roic
 
-def get_OVERVIEW(symbol):
+def get_AlphaAdvantage_OVERVIEW(symbol):
     import requests
     api_key = app.config["API_KEY"]
     endpoint = f'https://www.alphavantage.co/query?function=OVERVIEW&symbol={symbol}&apikey={api_key}'
@@ -100,7 +100,7 @@ def get_OVERVIEW(symbol):
     data = response.json()
     return data
 
-def get_INCOME_STATEMENT(symbol):
+def get_AlphaAdvantage_INCOME_STATEMENT(symbol):
     import requests
     api_key = app.config["API_KEY"]
     # Ottieni il conto economico (Income Statement)
@@ -109,7 +109,7 @@ def get_INCOME_STATEMENT(symbol):
     income_data = income_statement_response.json()
     return income_data
 
-def get_BALANCE_SHEET(symbol):
+def get_AlphaAdvantage_BALANCE_SHEET(symbol):
     import requests
     api_key = app.config["API_KEY"]
     balance_sheet_url = f'https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol={symbol}&apikey={api_key}'
@@ -125,7 +125,7 @@ def cercaTicker():
     #os.system('python main.py ' + ticker)  # Esegue main.py come comando
     
     ticker = request.form.get("name_input_cercaTicker") #contiene il ticker
-    data = get_OVERVIEW(ticker)
+    data = get_AlphaAdvantage_OVERVIEW(ticker)
     # Stampa i dati fondamentali
     print("Fundamentals for", ticker)
     print("P/E Ratio:", data.get("PERatio"))
@@ -136,14 +136,14 @@ def cercaTicker():
     # Puoi accedere a molti altri campi come `MarketCapitalization`, `DividendYield`, ecc.
     
     # Calcola l'Ebit
-    income_data = get_INCOME_STATEMENT(ticker)
-    ebit = calcolaEbit(ticker,income_data)
+    income_data = get_AlphaAdvantage_INCOME_STATEMENT(ticker)
+    ebit = calcola_AlphaAdvantage_Ebit(ticker,income_data)
     
-    taxRate = calcolaTaxRate(income_data)
+    taxRate = calcola_AlphaAdvantage_TaxRate(income_data)
     
     #Calcola il ROIC
-    balance_sheet_data = get_BALANCE_SHEET(ticker)
-    roic = calcolaROIC(ticker,ebit,taxRate, balance_sheet_data)
+    balance_sheet_data = get_AlphaAdvantage_BALANCE_SHEET(ticker)
+    roic = calcola_AlphaAdvantage_ROIC(ticker,ebit,taxRate, balance_sheet_data)
     print (f"ROIC: {roic} - Ebit: {ebit} - Tax rate: {taxRate}")
     return render_template('index.html', roic = roic)
 
