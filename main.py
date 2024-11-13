@@ -6,6 +6,7 @@
 # pip install flask-sqlalchemy: integrazione fra flask e sqlalchemy (questo installa anche flask e sqlalchemy)
 # pip install alembic: Modulo usato per la gestione della migrazione del database
 # pip install requests: Modulo per le chiamate alle API 
+# pip install scrapy
 #-------------------------------------------------------------------------------------------------------
 # LIBRERIE NON INSTALLATE 
 # pip install babel: Modulo usato per facilitare la formattazione di date e currency. E trova impiego anche per la internazionalizzazione delle applicazioni. Questo modulo è integrabile con Flask tramite Babel-Flask
