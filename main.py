@@ -210,6 +210,19 @@ def tiingo_get_DAILY(ticker):
     else:
         print("Errore nella richiesta:", response.status_code, response.text)
 
+
+def esegui_spider():
+    from scrapy.crawler import CrawlerProcess
+    from spiderman import MioSpider
+
+    process = CrawlerProcess(settings={
+        "FEEDS": {
+            "risultati.json": {"format": "json"},
+        },
+    })
+    process.crawl(MioSpider)
+    process.start()  # Avvia lo spider e blocca fino alla fine della sua esecuzione
+    
     
 # Altre rotte possono essere aggiunte qui
 # @app.route('/about')
