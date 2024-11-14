@@ -87,7 +87,8 @@ def calcola_AlphaAdvantage_ROIC(symbol,ebit,taxRate, balance_sheet_data):
     total_invested_capital = net_working_capital + fixed_assets
 
     # Aliquota fiscale (può variare, qui usiamo il 21% come media USA)
-    
+    #taxrate = 0.21
+
 
     # Calcolo del ROIC
     roic = (ebit * (1 - taxRate)) / total_invested_capital * 100
@@ -149,14 +150,19 @@ def cercaTicker():
     print (f"ROIC: {roic} - Ebit: {ebit} - Tax rate: {taxRate}")
     return render_template('index.html', roic = roic)
 
-def get_API_KEY():
+def get_API_KEY(fonteRichiesta):
     file = "api_key"
     fa = open(file, 'r')
     Lines = fa.readlines()
+    key = ""
     for x in Lines:
-        x = x.split("\n")[0] #prende tutto quello che precede il carattere '\n' presente alla fine della riga
-        x = x.replace(" ","") #tolgo eventuali spazi dalla stringa
-    return x
+        fonteStringa = x.split(":") #estrae la sottostringa a sinistra dei : con il nome della fonte
+        if fonteRichiesta == fonteStringa:
+            key = (x.split(":")[1]).split('\n')[0] #prende tutto quello successivo ai : e che precede il carattere '\n' presente alla fine della riga
+            key = key.replace(" ","") #tolgo eventuali spazi dalla stringa
+    if key == "":
+        exit("Errore - Nessuna API KEY individuata")
+    return key
 
 def tiingo_get_FUNDAMENTALS(ticker):
     import requests
